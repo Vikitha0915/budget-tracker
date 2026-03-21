@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sign Up</title>
+  <style>
+    :root{
+      --bg:#0f172a;          /* slate-900 */
+      --card:#111827;        /* gray-900 */
+      --muted:#94a3b8;       /* slate-400 */
+      --text:#e5e7eb;        /* gray-200 */
+      --primary:#6366f1;     /* indigo-500 */
+      --primary-600:#5458ee;
+      --ring: rgba(99,102,241,0.5);
+      --error:#f87171;       /* red-400 */
+      --ok:#34d399;          /* emerald-400 */
+      --input:#1f2937;       /* gray-800 */
+      --border:#374151;      /* gray-700 */
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+
+    * { box-sizing: border-box; }
+    html, body {
+      height: 100%;
+      background: radial-gradient(1000px 600px at 20% 10%, #111827 20%, transparent 50%),
+                  radial-gradient(900px 500px at 80% 0%, #1f2937 10%, transparent 60%),
+                  var(--bg);
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      margin: 0;
+      line-height: 1.4;
+    }
+
+    .wrap {
+      min-height: 100%;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 560px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.00)) , var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      backdrop-filter: blur(6px);
+    }
+
+    .header {
+      padding: 24px 24px 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .title {
+      margin: 0 0 6px;
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: .2px;
+    }
+
+    .subtitle {
+      margin: 0 0 8px;
+      color: var(--muted);
+      font-size: .95rem;
+    }
+
+    .body {
+      padding: 24px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .row {
+      display: grid;
+      gap: 12px;
+    }
+
+    @media (min-width: 560px) {
+      .row.grid-2 {
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+    }
+
+    label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: .95rem;
+      color: var(--text);
+    }
+
+    .req {
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .field {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    input[type="number"] {
+      width: 100%;
+      padding: 12px 44px 12px 12px;
+      background: var(--input);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      outline: none;
+      transition: border-color .15s, box-shadow .15s, transform .02s;
+    }
+
+    input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--ring);
+    }
+    input:active { transform: scale(0.999); }
+
+    .hint {
+      color: var(--muted);
+      font-size: .85rem;
+      margin-top: 6px;
+    }
+
+    .error {
+      color: var(--error);
+      font-size: .85rem;
+      margin-top: 6px;
+      display: none;
+    }
+
+    .ok {
+      color: var(--ok);
+      font-size: .85rem;
+      margin-top: 6px;
+      display: none;
+    }
+
+    .toggle {
+      position: absolute;
+      right: 10px;
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      padding: 6px 8px;
+      border-radius: 8px;
+    }
+    .toggle:hover { color: var(--text); background: rgba(255,255,255,0.04); }
+
+    .footer {
+      padding: 20px 24px 24px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px 18px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      letter-spacing: .2px;
+      transition: transform .05s ease, filter .15s ease, background .15s ease;
+    }
+    .btn:hover { filter: brightness(1.05); background: var(--primary-600); }
+    .btn:active { transform: translateY(1px); }
+
+    .btn.secondary {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+    .btn.secondary:hover { background: rgba(255,255,255,0.04); }
+
+    .note {
+      color: var(--muted);
+      font-size: .85rem;
+    }
+
+    /* Accessible hide but keep for screen readers */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      border: 0;
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <form class="card" id="signupForm" novalidate>
+      <div class="header">
+        <h1 class="title">Create your account</h1>
+        <p class="subtitle">Set up your credentials and budget targets.</p>
+      </div>
+
+      <div class="body" role="group" aria-labelledby="signup-fields">
+        <span id="signup-fields" class="sr-only">Sign up form fields</span>
+
+        <!-- Username -->
+        <div class="row">
+          <label for="username">Username <span class="req" aria-hidden="true">*</span></label>
+          <div class="field">
+            <input id="username" name="username" type="text" placeholder="e.g., alex_rao"
+                   autocomplete="username" required minlength="3" maxlength="32"
+                   pattern="^[A-Za-z0-9._-]{3,32}$"
+                   aria-describedby="username-hint username-error" />
+          </div>
+          <div id="username-hint" class="hint">
+            3–32 characters. Letters, numbers, dot, underscore, or dash.
+          </div>
+          <div id="username-error" class="error">Please enter a valid username.</div>
+        </div>
+
+        <!-- Passwords -->
+        <div class="row grid-2">
+          <div>
+            <label for="password">New Password <span class="req" aria-hidden="true">*</span></label>
+            <div class="field">
+              <input id="password" name="password" type="password" placeholder="New password"
+                     autocomplete="new-password" required minlength="8"
+                     aria-describedby="password-hint password-error password-ok" />
+              <button class="toggle" type="button" aria-label="Show password" data-toggle="password">👁</button>
+            </div>
+            <div id="password-hint" class="hint">
+              At least 8 characters. Use a mix of letters, numbers, symbols.
+            </div>
+            <div id="password-error" class="error">Password is too weak.</div>
+            <div id="password-ok" class="ok">Looks good.</div>
+          </div>
+
+          <div>
+            <label for="confirm">Re-enter Password <span class="req" aria-hidden="true">*</span></label>
+            <div class="field">
+              <input id="confirm" name="confirm" type="password" placeholder="Re-enter password"
+                     autocomplete="new-password" required
+                     aria-describedby="confirm-error confirm-ok" />
+              <button class="toggle" type="button" aria-label="Show password" data-toggle="confirm">👁</button>
+            </div>
+            <div id="confirm-error" class="error">Passwords do not match.</div>
+            <div id="confirm-ok" class="ok">Passwords match.</div>
+          </div>
+        </div>
+
+        <!-- Money fields -->
+        <div class="row grid-2">
+          <div>
+            <label for="income">Monthly Income (₹) <span class="req" aria-hidden="true">*</span></label>
+            <div class="field">
+              <input id="income" name="income" type="number" inputmode="decimal" placeholder="e.g., 50000"
+                     min="0" step="0.01" required aria-describedby="income-error" />
+            </div>
+            <div id="income-error" class="error">Please enter a valid income (0 or more).</div>
+          </div>
+
+          <div>
+            <label for="saving">Monthly Saving (₹)</label>
+            <div class="field">
+              <input id="saving" name="saving" type="number" inputmode="decimal" placeholder="e.g., 10000"
+                     min="0" step="0.01" aria-describedby="saving-error" />
+            </div>
+            <div id="saving-error" class="error">Saving must be 0 or more and not exceed income.</div>
+          </div>
+        </div>
+
+        <div class="row">
+          <label for="target">Target Expense (₹)</label>
+          <div class="field">
+            <input id="target" name="target" type="number" inputmode="decimal" placeholder="e.g., 20000"
+                   min="0" step="0.01" aria-describedby="target-error" />
+          </div>
+          <div id="target-error" class="error">Target expense must be 0 or more.</div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div class="note">By continuing, you agree to our Terms & Privacy.</div>
+        <div style="display:flex; gap:10px;">
+          <button type="reset" class="btn secondary">Reset</button>
+          <button type="submit" class="btn">Create Account</button>
+        </div>
+      </div>
+    </form>
+  </main>
+
+  <script>
+    // Utility selectors
+    const $ = (s, root=document) => root.querySelector(s);
+
+    const form = $('#signupForm');
+    const username = $('#username');
+    const pwd = $('#password');
+    const confirmPwd = $('#confirm');
+
+    const income = $('#income');
+    const saving = $('#saving');
+    const target = $('#target');
+
+    const usernameError = $('#username-error');
+    const pwdError = $('#password-error');
+    const pwdOk = $('#password-ok');
+    const confirmError = $('#confirm-error');
+    const confirmOk = $('#confirm-ok');
+    const incomeError = $('#income-error');
+    const savingError = $('#saving-error');
+    const targetError = $('#target-error');
+
+    // Toggle password visibility buttons
+    document.querySelectorAll('.toggle').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.getAttribute('data-toggle');
+        const field = document.getElementById(targetId);
+        const isPwd = field.type === 'password';
+        field.type = isPwd ? 'text' : 'password';
+        btn.setAttribute('aria-label', isPwd ? 'Hide password' : 'Show password');
+      });
+    });
+
+    // Simple password strength heuristic
+    function strongEnough(value) {
+      // at least 8 chars and contains 2 of: upper, lower, digit, symbol
+      const lengthOk = value.length >= 8;
+      const upper = /[A-Z]/.test(value);
+      const lower = /[a-z]/.test(value);
+      const digit = /\d/.test(value);
+      const symbol = /[^A-Za-z0-9]/.test(value);
+      const categories = [upper, lower, digit, symbol].filter(Boolean).length;
+      return lengthOk && categories >= 2;
+    }
+
+    function show(el) { if (el) el.style.display = 'block'; }
+    function hide(el) { if (el) el.style.display = 'none'; }
+
+    // Live validations
+    username.addEventListener('input', () => {
+      if (username.validity.valid) hide(usernameError);
+      else show(usernameError);
+    });
+
+    pwd.addEventListener('input', () => {
+      if (!pwd.value) { hide(pwdOk); hide(pwdError); return; }
+      if (strongEnough(pwd.value)) { show(pwdOk); hide(pwdError); }
+      else { show(pwdError); hide(pwdOk); }
+      // Update confirm match state as user types
+      validateConfirm();
+    });
+
+    confirmPwd.addEventListener('input', validateConfirm);
+
+    function validateConfirm() {
+      if (!confirmPwd.value) { hide(confirmError); hide(confirmOk); return; }
+      if (confirmPwd.value === pwd.value) { hide(confirmError); show(confirmOk); }
+      else { show(confirmError); hide(confirmOk); }
+    }
+
+    // Numeric fields validation
+    function parseNum(v) {
+      const n = Number(v);
+      return Number.isFinite(n) ? n : NaN;
+    }
+
+    function validateIncome() {
+      const n = parseNum(income.value);
+      if (income.value === '' || isNaN(n) || n < 0) { show(incomeError); return false; }
+      hide(incomeError); return true;
+    }
+
+    function validateSaving() {
+      if (saving.value === '') { hide(savingError); return true; }
+      const inc = parseNum(income.value);
+      const sav = parseNum(saving.value);
+      if (isNaN(sav) || sav < 0 || (!isNaN(inc) && sav > inc)) { show(savingError); return false; }
+      hide(savingError); return true;
+    }
+
+    function validateTarget() {
+      if (target.value === '') { hide(targetError); return true; }
+      const t = parseNum(target.value);
+      if (isNaN(t) || t < 0) { show(targetError); return false; }
+      hide(targetError); return true;
+    }
+
+    income.addEventListener('input', () => { validateIncome(); validateSaving(); });
+    saving.addEventListener('input', validateSaving);
+    target.addEventListener('input', validateTarget);
+
+    // Submit handler
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      // HTML5 validity + custom checks
+      const usernameOk = username.checkValidity();
+      const pwdOkFlag = strongEnough(pwd.value);
+      const confirmOkFlag = confirmPwd.value === pwd.value && !!pwd.value;
+      const incomeOk = validateIncome();
+      const savingOk = validateSaving();
+      const targetOk = validateTarget();
+
+      usernameError.style.display = usernameOk ? 'none' : 'block';
+      pwdError.style.display = pwdOkFlag ? 'none' : 'block';
+      confirmError.style.display = confirmOkFlag ? 'none' : 'block';
+
+      const allOk = usernameOk && pwdOkFlag && confirmOkFlag && incomeOk && savingOk && targetOk;
+
+      if (!allOk) {
+        // Focus the first invalid field
+        const firstInvalid =
+          (!usernameOk && username) ||
+          (!pwdOkFlag && pwd) ||
+          (!confirmOkFlag && confirmPwd) ||
+          (!incomeOk && income) ||
+          (!savingOk && saving) ||
+          (!targetOk && target);
+        if (firstInvalid) firstInvalid.focus();
+        return;
+      }
+
+      // Demo: show the payload in console (don’t send passwords in plaintext in production)
+      const payload = {
+        username: username.value.trim(),
+        income: Number(income.value),
+        saving: saving.value ? Number(saving.value) : null,
+        targetExpense: target.value ? Number(target.value) : null
+      };
+      console.log('Form ready to submit:', payload);
+
+      // TODO: Replace with your backend endpoint
+      // form.method = 'POST';
+      // form.action = '/api/auth/signup';
+      // form.submit();
+
+      // Friendly UX: show a simple success state
+      alert('Account created successfully (demo). Check console for payload.');
+      form.reset();
+      hide(pwdOk); hide(confirmOk);
+      hide(usernameError); hide(pwdError); hide(confirmError);
+      hide(incomeError); hide(savingError); hide(targetError);
+    });
+  </script>
+</body>
+</html>
